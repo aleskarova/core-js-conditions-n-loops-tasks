@@ -297,8 +297,6 @@ function getBalanceIndex(arr) {
   return -1;
 }
 
-getBalanceIndex([1, 1]);
-
 /**
  * Generates a spiral matrix of a given size, filled with numbers in ascending order starting from one.
  * The direction of filling with numbers is clockwise.
@@ -320,8 +318,83 @@ getBalanceIndex([1, 1]);
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  for (let i = 0; i < size; i += 1) {
+    const row = [];
+    for (let j = 0; j < size; j += 1) {
+      row[j] = 0;
+    }
+    matrix[i] = row;
+  }
+
+  let direction = 'right';
+  let x = 0;
+  let y = 0;
+  let n = 1;
+  while (n <= size * size) {
+    switch (direction) {
+      case 'right':
+        for (let i = 0; i < size; i += 1) {
+          if (matrix[x][y] !== 0) {
+            break;
+          }
+          matrix[x][y] = n;
+          n += 1;
+          if (y < size - 1 && matrix[x][y + 1] === 0) {
+            y += 1;
+          }
+        }
+        x += 1;
+        direction = 'down';
+        break;
+      case 'down':
+        for (let i = 0; i < size; i += 1) {
+          if (matrix[x][y] !== 0) {
+            break;
+          }
+          matrix[x][y] = n;
+          n += 1;
+          if (x < size - 1 && matrix[x + 1][y] === 0) {
+            x += 1;
+          }
+        }
+        y -= 1;
+        direction = 'left';
+        break;
+      case 'left':
+        for (let i = 0; i < size; i += 1) {
+          if (matrix[x][y] !== 0) {
+            break;
+          }
+          matrix[x][y] = n;
+          n += 1;
+          if (y > 0 && matrix[x][y - 1] === 0) {
+            y -= 1;
+          }
+        }
+        x -= 1;
+        direction = 'up';
+        break;
+      case 'up':
+        for (let i = 0; i < size; i += 1) {
+          if (matrix[x][y] !== 0) {
+            break;
+          }
+          matrix[x][y] = n;
+          n += 1;
+          if (x > 0 && matrix[x - 1][y] === 0) {
+            x -= 1;
+          }
+        }
+        y += 1;
+        direction = 'right';
+        break;
+      default:
+        throw new Error(`Unknown direction: ${direction}`);
+    }
+  }
+  return matrix;
 }
 
 /**
