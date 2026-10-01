@@ -451,8 +451,58 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  const n = str.length;
+  if (n < 2 || iterations === 0) {
+    return str;
+  }
+
+  let j = 0;
+  const mapping = [];
+  for (let i = 0; i < n; i += 2) {
+    mapping[j] = i;
+    j += 1;
+  }
+  for (let i = 1; i < n; i += 2) {
+    mapping[j] = i;
+    j += 1;
+  }
+
+  const visited = [];
+  const result = [];
+  for (let i = 0; i < n; i += 1) {
+    visited[i] = false;
+    result[i] = '';
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    if (!visited[i]) {
+      const cycle = [];
+      let curr = i;
+      j = 0;
+      while (!visited[curr]) {
+        visited[curr] = true;
+        cycle[j] = curr;
+        j += 1;
+        curr = mapping[curr];
+      }
+
+      const cycleLen = cycle.length;
+      const effectiveShift = iterations % cycleLen;
+
+      for (let idx = 0; idx < cycleLen; idx += 1) {
+        const destIdx = cycle[idx];
+        const sourceIdx = cycle[(idx + effectiveShift) % cycleLen];
+        result[destIdx] = str[sourceIdx];
+      }
+    }
+  }
+  let finalResult = '';
+  for (let i = 0; i < n; i += 1) {
+    finalResult += result[i];
+  }
+
+  return finalResult;
 }
 
 /**
